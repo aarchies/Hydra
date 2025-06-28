@@ -3,9 +3,9 @@ db:
     hosts:
       - "120.0.0.1"
     port: 4000
+    dataBase: "hydra"
     username: "root"
     password: ""
-    dataBase: "platform"
     max-idle-conn: 10
     max-open-conn: 100
     config: "charset=utf8mb4&parseTime=True&loc=Local"
@@ -13,23 +13,23 @@ db:
   clickhouse:
     hosts:
       - "120.0.0.1:9000"
-    username: "platform"
-    password: "s0ynO7s7xwhT2LD"
-    dataBase: "platform"
+    dataBase: "hydra"
+    username: "root"
+    password: ""
     max-idle-conn: 10
     max-open-conn: 100
-    is_debug: false # 是否开启debug模式
+    is_debug: false
 
 system:
+  log_level: "info"
   path: "static"
   location_file: "IP2LOCATION-LITE-DB11.BIN"
   protocol_file: "protocol.json"
   protocol_key_file: "protocol_key.json"
   portrait_map_file: "portrait.json"
   area_file: "area.json"
-  log_level: 'info'
- 
+
 session:
-  expired: 20 # 会话过期时间（秒）
-  pcap_path: "/pcap" # 会话pcap保存路径 /NFSPath/pcapPath
-  root_path: "/root"  # nfs路径 (根路径)
+  expired: 20
+  pcap_path: "/pcap"
+  root_path: "/root"

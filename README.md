@@ -1,3 +1,39 @@
+# Hydra - 工业网络流量分析系统
+
+## 系统特点
+
+1. **高性能并发处理**
+   - 基于MPG(Multi-Process-Go)并发模型
+   - 父子进程架构设计
+   - 动态负载均衡
+   - 自适应资源调度
+
+2. **插件化架构**
+   - 模块化设计
+   - 可扩展的插件系统
+   - 灵活的协议解析
+   - 丰富的分析能力
+
+3. **高效进程间通信**
+   - 基于共享内存的IPC
+   - 无锁环形缓冲区
+   - Futex同步原语
+   - 批量数据传输
+
+4. **智能调度系统**
+   - 三维权重动态计算
+   - 自适应负载均衡
+   - 资源使用监控
+   - 故障自动恢复
+
+5. **协议支持**
+   - Modbus/TCP
+   - S7COMM
+   - IEC 60870-5-104
+   - DNP3
+   - BACnet
+   - 等800多种工业协议
+
 # 项目结构
 
 ```shell
@@ -39,153 +75,134 @@
 
 1. 新增插件需要注册插件 根目录下plugin.cfg,可参考现有插件注册方式
 2. include cgo头文件，分别在win/unix 加载lib目录中的dll或者so文件
+3. 插件开发需遵循标准接口规范
+4. 所有插件按照plugin.cfg中的顺序依次执行
 
-## 流量链路
+## 系统架构
+
+### 1. MPG并发模型
+```shell
+                      +----------------+
+                      |    主进程      |
+                      +--------+-------+
+                               |
+                      +--------v-------+
+                      |   调度中心     |
+                      +--------+-------+
+                               |
+              +----------------+-----------------+
+              |                |                |
+        +-----v-----+    +-----v-----+    +-----v-----+
+        | 工作进程1  |    | 工作进程2  |    | 工作进程N  |
+        +-----------+    +-----------+    +-----------+
+```
+
+### 2. 进程间通信
+```shell
+1. 共享内存通信
+   - 环形缓冲区设计
+   - 无锁队列实现
+   - Futex同步机制
+   
+2. 数据流结构
+   - Header (64字节对齐)
+   - Buffer (1MB大小)
+   - 批量传输(32条/批)
+```
+
+### 3. 调度算法
 
 ```shell
-1. 初始化流程:
-main.go -> init()
-  ├── config.MustLoad()           # 加载配置
-  ├── module.Register()           # 注册模块
-  └── core.Run()                  # 启动核心
-      ├── tshark.Init()           # 初始化 tshark
-      └── instance.Register()     # 注册实例
-          └── Entrance()          # 入口函数
+1. 父进程权重计算
+   0.4*(CPU使用率) + 0.3*(任务队列) + 0.3*(内存使用率)
 
-2. 数据处理流程:
+2. 子进程权重计算
+   0.5*(CPU使用率) + 0.2*(任务队列) + 0.3*(内存使用率)
 
-1. Socket 模式:
-   socket.StartSocketServer() -> Entrance() -> analyzer()
+3. 动态调整策略
+   - CPU > 70% 触发扩容
+   - CPU < 30% 触发缩容
+   - 任务堆积自动负载均衡
+```
 
-2. 导出函数模式:
-   Entrance() -> analyzer() -> dissect_single_packet()
+### 4. 插件系统
 
-3. 离线分析模式:
-   offline.ProcessPcap() -> suricata.Send() -> analyzer()
+```shell
+1. 标准插件接口
+   - Handle(result *ConsumerData)
+   - Init() error
+   - Close() error
 
-3. 插件处理流程:
-analyzer()
-  ├── dissect_single_packet()     # Tshark 解析
-  ├── convertGoPacketResult()     # 结果转换
-  └── processPacketResult()       # 结果处理
-      └── plugin.Handle()         # 插件处理
+2. 内置插件
+   - 异常处理(exception)
+   - 协议解析(explain)
+   - 资产识别(asset)
+   - 特征分析(portrait)
+   - 告警处理(warn)
+   - 会话管理(session)
+   - 数据存储(store)
 
-4. 函数调用链路:
- app.init()
-      -> module.Register()
-          -> plugin.Register()
-               -> plugin.Init()
-                     -> core.Run()
-                           ├── tshark.Init()          # Tshark 初始化
-                           └── instance.Register()     # 注册处理实例
-                                 ├── socket.StartSocketServer()   # Socket 服务 if win
-                                 └── analyzer()                   # 核心分析
-                                      ├── dissect_single_packet() # 数据包解析
-                                      ├── convertGoPacketResult() # 结果转换
-                                      └── processPacketResult()   # 结果处理
-                                           └── plugin.Handle()    # 插件处理
+3. 插件执行流程
+   exception -> explain -> asset -> portrait -> warn -> session -> store
+```
 
-5. 数据流转过程:
+### 5. 数据处理流程
 
+```shell
 1. 数据输入
-   ├── Socket 接收
+   ├── Socket接收
    ├── 导出函数调用
    └── 离线文件分析
 
-2. 数据处理
-   ├── Tshark 解析
-   ├── 结果转换
-   └── 插件处理
-       ├── 会话管理
-       ├── 数据存储
-       ├── 告警处理
-       └── 离线分析
-```
- 
-# 架构设计
+2. 核心处理
+   ├── 数据包解析(Tshark)
+   ├── 协议识别
+   ├── 特征提取
+   └── 告警分析
 
-1. mpg并发模型
-```shell
-
+3. 结果输出
+   ├── 实时告警
+   ├── 会话记录
+   ├── 资产信息
+   └── 统计数据
 ```
 
-2.父子进程通信
-```shell
- (1).go->runtime->actor
- 本质上类似于channal的实现，底层为ringbuffer 
- (2).父/子各进行双向mmap映射绑定+futex同步原语
-
-```
-
-2. 权重调度
-
-``` shell
-                      +----------------+
-                      | 流量入口网关   |
-                      +--------+-------+
-                               | 哈希分发
-                      +--------v-------+
-                      | 父进程调度中心 | 
-                      +--------+-------+
-                               | 权重动态分配
-       +-----------------------+-----------------------+
-       |                       |                       |
-+------v------+         +------v------+         +------v------+
-| 子进程1     |         | 子进程2     |         | 子进程N     |
-| (权重动态) |         | (权重动态) |         | (权重动态) |
-+------------+         +------------+         +------------+
-```
-
-2. 三维权重计算
-
-``` shell
-// 父进程公式
-0.4*(CPU因子) + 0.3*(Pending因子) + 0.3*(内存因子)
-
-// 子进程公式 
-0.5*(CPU因子) + 0.2*(Pending因子) + 0.3*(内存因子)
-```
-
-3. 资源动态及自愈机制
+## 自愈机制
 
 ```shell
-graph TD
-    A[Controller] -->|监控| B(Metrics Collector)
-    A -->|调度| C[M Pool]
-    A -->|管理| D[P Pool]
-    C --> E[M1]
-    C --> F[M2]
-    E --> G[P1]
-    E --> H[P2]
-    F --> I[P3]
-    B -->|收集| J[CPU/Mem/Pending]
+1. 健康检查
+   - 定期检测进程状态
+   - 监控资源使用情况
+   - 检查任务处理延迟
 
-graph TD
-    A[开始检查] --> B{CPU>70%或任务堆积?}
-    B -->|是| C[执行扩容]
-    B -->|否| D{CPU<30%且空闲?}
-    D -->|是| E[执行缩容]
-    D -->|否| F[保持现状]
+2. 故障处理
+   - 进程异常自动重启
+   - 任务自动重分配
+   - 资源动态调整
 
-sequenceDiagram
-    participant H as 健康检查
-    participant C as Controller
-    participant M as 故障M
-    
-    H->>C: 发现M无响应
-    C->>M: 标记为故障状态
-    C->>C: 转移任务到其他M
-    C->>M: 发送重启指令
-    M->>M: 清理旧上下文
-    M->>M: 创建新上下文
-    M->>M: 重启运行循环
-    M->>C: 重新注册到备用池
-
-stateDiagram-v2
-    [*] --> Active: 正常启动
-    Active --> Faulty: 检测到故障
-    Faulty --> Recovering: 开始恢复
-    Recovering --> Standby: 恢复完成
-    Standby --> Active: 被重新激活
-    Recovering --> Faulty: 恢复失败            
+3. 数据保护
+   - 共享内存持久化
+   - 任务队列备份
+   - 状态自动恢复
 ```
+
+## 性能优化
+
+1. 内存管理
+   - 页面预分配
+   - 缓存行对齐
+   - 内存池复用
+
+2. 调度优化
+   - CPU亲和性绑定
+   - NUMA感知调度
+   - 批量任务处理
+
+3. 通信优化
+   - 零拷贝传输
+   - 批量数据传输
+   - 异步消息处理
+
+## 许可证
+
+[LICENSE](LICENSE)
