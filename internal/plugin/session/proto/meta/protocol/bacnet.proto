@@ -1,0 +1,29 @@
+syntax = "proto2";
+package meta;
+
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+/**
+
+ */
+message BacNetInfo{
+  optional uint32 version = 1; // BACnet 协议版本号
+  optional string dnet = 2; // BACnet 目标网络地址
+  optional bool controlsrc = 3; // BACnet 控制源指定
+  optional bool controlres2 = 4; // 保留字段，无具体作用
+  optional uint32 dadrmstp = 5; // BACnet 主站设备地址
+  optional uint32 hoPc = 6; // 数据包转发的网络跳数计数
+  optional bool controlres1 = 7; // 保留字段，暂未使用
+  optional bool controlnet = 8; //BACnet 控制网络字段，NSDU 包含
+  optional string snet = 9; //    BACnet 源网络地址
+  optional bool controldest = 10; // BACnet 控制目标指定符
+  optional uint32 sadrmstp = 11; // BACnet 地址解析协议主站标识
+  optional uint32 dlen = 12; // 目的 MAC 层地址长度
+  optional bool control = 13; // BACnet 控制
+  optional bool controlexpect = 14; // 期待回复的控制
+  optional bool controlpriohigh = 15; // 优先级（高）
+  optional bool controlpriolow = 16; // BACnet 控制低优先级
+  optional string sadreth = 17; // BACNet 以太网源地址
+  optional uint32 slen = 18; // BACnet 源 MAC 地址长度
+  optional string dadreth = 19; // BACnet 目的以太网 MAC 地址
+}

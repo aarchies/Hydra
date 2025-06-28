@@ -1,0 +1,19 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message Iec104Info {
+  optional int64 cptimemin = 1;  //20	分钟
+  optional uint32 numix = 2;  //	信息体地址的序号
+  optional uint32 ioa = 3;//	信息对象地址
+  optional int64 cptimems = 4;  //毫秒部分时间
+  optional bool cptimesu = 5;//	状态更新标志位
+  optional int64 cptimeday = 6;//日（日期中的日）
+  optional uint32 typeid = 7;  //IEC60870 数据单元类型标识
+  optional uint32 coi = 8;//信息对象标识符的类别
+  optional bool sq = 9;//单点遥信状态或序列信息
+  optional uint32 addr = 10;  //IEC60870 数据单元地址
+  optional uint32 cptimedow = 11;  //星期几（Day Of Week）
+  optional uint32 utype = 12;  //IEC60870-104 消息类型
+  optional uint32 type = 13;  //	IEC60870-104 消息类型
+}

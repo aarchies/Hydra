@@ -1,0 +1,38 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message Iec61850MmsInfo{
+  optional string confirmed = 1;//	确认服务请求
+  optional string localDetailCall = 2;  //本地详细主叫信息
+  optional bool write = 3;  //	mms 写入操作
+  optional uint32 negociatedVersion = 4;  //	协商版本号
+  optional uint32 proposedVersion = 5;  //	提议的版本号
+  optional string objectScope = 6;  //	对象作用域
+  optional string components = 7;  //	组件或部件
+  optional uint32 integer = 8;  //mms 中的整型
+  optional string octetstring = 9;  //八位字节字符串
+  optional string name = 10;//	多媒体消息服务名称
+  optional string Data = 11;//协议的数据
+  optional float floatingpoint = 12;  //	浮点型数据
+  optional string WriteResProtocol = 13;//	写响应项的协议
+  optional uint32 ParSupportOptiontpy = 14;  //	参数支持选项类型
+  optional uint32 variableAttributes = 15;  //获取变量访问属性
+  optional bool namedVariableOptions = 16;  //	定义命名变量的服务支持选项
+  optional bool downloadSegOptions = 17;  //	下载分段服务支持选项
+  optional bool uploadSegOptions = 18;//上传分段服务支持选项
+  optional bool startDownloadIndication = 19;  //启动下载序列指示
+  optional bool signalStatus = 20;//	报告信号量状态
+  optional bool endUploadOptions = 21;  //	终止上传序列的服务支持选项
+  optional bool outputOptions = 22;  // 服务支持输出选项
+  optional bool killOptions = 23;  //服务支持选项中的终止功能
+  optional bool delEventOptions = 24;  //删除事件条件服务支持选项
+  optional bool reqDownloadOptions = 25;  //请求域下载服务支持选项
+  optional bool initUploadOptions = 26;  //初始化上传序列服务支持选项
+  optional bool fileReadOptions = 27;  //文件读取服务支持选项
+  optional bool alterEventOptions = 28;  //	变更事件登记服务支持选项
+  optional bool logsOptions = 29;  //	创建日志的服务支持选项
+  optional bool fileDirOptions = 30;//	文件目录服务支持选项
+  optional bool concludeOptions = 31;  //	MMS 服务支持选项之结束
+  optional bool fileRenameOptions = 32;  //	文件重命名服务支持选项
+}

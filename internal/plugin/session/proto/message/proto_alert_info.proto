@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "ProtoAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+// 特色协议威胁告警信息
+message PROTO_ALERT_INFO {
+    optional	string	proto_alarm_name	            =1;//	告警名称	
+    optional	string	proto_model_name	            =2;//	检测模型	
+    optional	uint32	proto_attack_level	            =3;//	威胁评分	低危:61-80/中危:81-90 /高危:91-100 
+    optional	string	proto_alarm_principle	        =4;//	检测原理	
+    repeated	string	proto_alarm_reason_key	        =5;//	告警匹配特征	
+    repeated	string	proto_alarm_reason_actual_value	=6;//	告警特征命中情况	
+    repeated	string	proto_targets_name	            =7;//	告警对象名称	Web漏洞利用/漏洞扫描/后门利用
+    repeated	string	proto_targets_type	            =8;//	告警对象类型	session/ip/domain/cert/finger
+    repeated	string	proto_malious_family_type	    =9;//	恶意家族类型	恶意软件/APT组织
+    repeated	string	proto_malious_family_name	    =10;//	恶意家族名称	apt29/apt32
+    repeated	string	proto_threat_tag	            =11;//	威胁标签	"HTTP隐蔽隧道"
+    optional	string	proto_victim_host	            =12;//	受害者HTTP域名	
+    optional	string	proto_victim_sni	            =13;//	受害者SNI域名	
+    optional	string	proto_alarm_handle_method	    =14;//	处置方法	
+}

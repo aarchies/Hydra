@@ -1,0 +1,23 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message ModbusInfo
+{
+  optional    string   regChgDlt = 1;
+  optional    string  regNewVal = 2;
+  optional    string  regOldVal = 3;
+  optional    string  protoID = 4;
+  optional    uint32  len = 5;
+  optional    uint32  func = 6;
+  optional    uint32  excp = 7;
+  optional    uint32  transID = 8;
+  optional    uint32  unitID = 9;
+  optional    uint32  addr = 10;
+  optional    uint32  registerCount = 11;
+  optional    string   vendor = 12;
+  optional    string   product = 13;
+  optional    string   firmwareVersion = 14;
+  optional    string   softwareVersion = 15;
+
+}

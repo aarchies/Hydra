@@ -1,0 +1,16 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message Sinech1Info{
+  optional uint32 len = 1;  // 	长度指示
+  optional uint32 blocklen = 2;  //	数据块长度
+  optional uint32 dwnr = 3;  //	内存块内地址
+  optional uint32 resvalue = 4;  //	响应值
+  optional uint32 opcode = 5;  //	操作码，指示操作类型
+  optional uint32 blocktype = 6;  //	h1 块类型
+  optional uint32 org = 7;  // 表示存储类型
+  optional uint32 dbnr = 8;  //	内存块编号
+  optional string header = 9;  //	H1 头部
+  optional uint32 dlen = 10;//以字为单位的长度
+}

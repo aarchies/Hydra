@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "CertAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+// 证书告警信息
+message CERT_ALERT_INFO	{
+    
+}

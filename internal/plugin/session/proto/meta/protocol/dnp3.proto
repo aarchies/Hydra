@@ -1,0 +1,23 @@
+syntax = "proto2";
+package meta;
+
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message DNP3Info
+{
+  optional    uint32  protType = 1;
+  optional    uint32  len = 2;
+  optional    uint32  linkFlags = 3;
+  optional    uint32  dstAddr = 4;
+  optional    uint32  srcAddr = 5;
+  optional    uint32  linkCRC = 6;
+  optional    uint32  transFlags = 7;
+  optional    uint32  appFlags = 8;
+  optional    uint32  appFunc = 9;
+  optional    uint32  appObj = 10;
+  optional    uint32  appObjArgs = 11;
+  optional    string   appQual = 12;
+  optional    string   appRng = 13;
+  optional    uint32  start = 14;
+
+}

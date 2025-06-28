@@ -1,0 +1,20 @@
+syntax = "proto2";
+package meta;
+
+import "google/protobuf/any.proto";
+
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message ProtocolInfo
+{
+	required uint32 type=1;//类型值与协议元数据TLV类型保持一致,见《协议元数据字段提取规范-v1.0.6》中“协议编号”
+	required google.protobuf.Any protocol_meta=2;//存储具体协议元数据(协议元数据pb参见protocol文件夹)
+}
+
+message MetaInfo
+{
+    repeated ProtocolInfo protocol_info=1;//协议信息
+}
+
+
+

@@ -1,0 +1,38 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message OpcUaInfo {
+  optional uint32 transportmms = 1; // 最大消息尺寸
+  optional uint32 transportsize = 2; // 传输消息大小
+  optional uint32 securityseq = 3; // 安全序列编号
+  optional string transportchunk = 4; //传输块类型
+  optional uint32 securityrqid = 5; // 请求标识
+  optional string securityrcthumb = 6; // 接收方证书指纹
+  optional bool isLocalInfo = 7; // 是否有本地信息
+  optional bool isServerIndex  = 8; // 是否有服务器索引
+  optional bool isText = 9; // 是否有文本
+  optional bool isDiagnosisCode = 10; // 是否有内部诊断代码
+  optional uint32 loctextmask = 11; // 编码掩码，用于特定编码
+  optional bool isBinaryBody = 12; // 是否有二进制主体
+  optional string transporttype = 13; // 传输消息的类型
+  optional string securityscert = 14; // 发送方证书
+  optional uint32 transportmcc = 15;// 最大分块数量
+  optional uint32 internalCode = 16;// 服务等级/内部状态码
+  optional bool returndiag = 17;// 返回诊断信息的
+  optional uint32 opInternalCode = 18; // 操作层内状态码
+  optional string transportendpoint = 19; // OPCUA 传输端点的 URL 地址
+  optional string diagnosisCode = 20; // 服务等级/内部诊断信息
+  optional uint32 UserTokenType = 21; // OPCUA 用户令牌类型
+  optional string createdAt = 22; // 创建时间
+  optional uint32 timeType = 23; // 返回的时间戳类型
+  optional uint32 applicationType = 24; // OPCUA 应用类型
+  optional string auditEntryId = 25; // 审计项标识
+  optional uint32 issuedTokenType = 26; // OPC UA 颁发令牌类型
+  optional uint32 revisedLifetime = 27; // 修订后的生命周期
+  optional string serverCertificate = 28; // 服务器证书
+  optional uint32 securityLevel = 29; //  OPCUA 安全级别
+  optional uint32 serviceResult = 30; // 服务结果
+  optional uint32 token = 31; // 令牌标识
+  optional uint32 policyId = 32; // OPCUA 协议策略 ID
+}

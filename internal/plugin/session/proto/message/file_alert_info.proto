@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "FileAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+// 文件告警信息
+message FILE_ALERT_INFO  {
+  required  string  file_md5 = 1;//	文件MD5
+  required  string  file_sha1 = 2;//	文件SHA1
+  required  string  file_sha256 = 3;//	文件SHA256
+  required  string  file_sha512 = 4;//	文件SHA512
+  required  string  file_crc32 = 5;//	文件CRC32
+  required  string  file_ssdeep = 6;//	文件SSDeep
+  required  uint32  file_size = 7;//	文件大小
+  required  string  file_type = 8;//	文件结构签名
+  required  string  file_offset_hash_md5 = 9;//	文件偏移HASH
+  required  uint32  file_offset_hash_chunk_size = 10;//	文件偏移HASH位置
+  required  string  file_hash_result = 11;//	HASH检测结果
+  required  string  file_av_result = 12;//	AV检测结果
+  required  string  file_ex_av_name = 13;//	外部AV名称
+  required  string  file_ex_av_result = 14;//	外部AV检测结果
+  required  string  file_yara_rule_name = 15;//	yara规则名
+  required  uint32  file_yara_threat_level = 16;//	yara规则威胁等级	1：正常，2：低危，3：中危，4：高危
+  optional  string  file_dde = 17;//	DDE内容
+  required  string  file_platform = 18;//	沙箱系统环境
+  required  string  file_ml_detect_model = 19;//	威胁检测模型名称
+  required  string  file_ml_precision = 20;//	威胁检测模型置信度	百分数字符串
+  required  string  file_ml_class_model = 21;//	威胁分类模型名称
+  required  double  file_ml_prediction = 22;//	威胁分类模型置信度	百分数小数
+  optional  string  file_ioc_ip = 23;//	IP IOC
+  optional  string  file_ioc_dns = 24;//	DNS IOC
+  optional  string  file_ioc_url = 25;//	URL IOC
+  required  string  file_path = 26;//	文件路径
+  required  string  sandbox_report_url = 27;//	沙箱报告路径
+}

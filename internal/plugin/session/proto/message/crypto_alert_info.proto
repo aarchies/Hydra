@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "CryptoAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+// 密数据异常告警信息	
+message CRYPTO_ALERT_INFO{
+  optional uint64  crypto_stream_id = 1;//	流ID	7214956298192818176
+  optional bool  crypto_encrypted = 2;//	加密标识	0: 非加密应用；1: 加密应用
+  optional string  crypto_app_name = 3;//	应用名称	如高铁管家、高途、高德地图、驾考精灵、驾校宝典、驾校一点通、驴迹导游等
+  optional uint32  crypto_app_type_id = 4;//	应用类型ID	应用类型 ID，1-100 为通用应用类型，101-150 为敏感应用类型，151-250 为行业专属，251 以后为自定义应用
+  optional string  crypto_app_type = 5;//	应用类型	"云服务"
+  optional uint32  crypto_app_class_id = 6;//	应用分类ID
+  optional string  crypto_app_class = 7;//	应用分类	"云服务"
+  optional string  crypto_action_type = 8;//	交互规则类型	如：点击支持、点击 VIP 模块、浏览、检索、检查更新、查地图、柚子街
+  optional uint32  asset_id_client = 9;//	客户端资产对应标识符	58
+  optional uint32  asset_id_server = 10;//	服务端资产对应标识符	0
+  optional string  crypto_risk_name = 11;//	异常标签	"('服务端证书链校验失败', '服务端叶子证书密钥用法异常数字签名', '服务端叶子证书增强密钥用法异常', '支持无认证加密套件', '支持弱加密加密套件', '支持弱摘要加密套件', '冗余密钥交换', '缺失密钥交换', '使用压缩')"
+  optional string  crypto_risk_level = 12;//	风险等级	"低"
+  optional string  crypto_cert_fingerprint = 13;//	证书指纹	"79CBC71FAE5C3D630ACC92A6F1BC77C083108DD6"
+  optional uint64  crypto_rule_id = 14;//	威胁规则 ID
+  optional string  crypto_rule_type = 15;//	威胁规则类型	"标准化规则"
+  optional string  crypto_threat_subtype = 16;//	威胁标签	"TCP 隧道"
+  optional string  crypto_threat_level = 17;//	威胁等级	分为高危、中危和低危
+  optional string  crypto_threat_family = 18;//	威胁所属家族	"CobaltStrike"
+  optional string  crypto_threat_group = 19;//	威胁组织	"Sidewinder 响尾蛇"
+  optional string  crypto_threat_direction = 20;//	威胁方向	"俄罗斯"
+  optional string  crypto_threat_description = 21;//	威胁详细描述	"一系列对TLS加密协议的扫描攻击，此类攻击通常针对HTTPS服务，攻击者使用的黑客工具为W3af.1.6.49_2019_kali2018_64"
+  optional string  crypto_direction = 22;//	攻击方向	入联风险、横向风险、出联风险
+  optional string  crypto_detection_state = 23;//	研判状态	未研判、误报、攻击行为、攻击成功、未知
+  optional string  crypto_detection_describe = 24;//	研判原因	"Suricata"
+  optional string  crypto_hand_result = 25;//	握手评分	"100"
+  optional string  crypto_flow_result = 26;//	流模型评分	"100"
+  optional string  crypto_cert_result = 27;//	证书评分	"88"
+  optional string  crypto_domain_result = 28;//	DNS评分	"81"
+  optional string  crypto_result = 29;//	综合评分	"95"
+}

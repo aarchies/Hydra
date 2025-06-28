@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "IoaAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+//攻击利用告警信息
+message IOA_ALERT_INFO{
+    required	uint64	ioa_stream_id					=1;//	流ID	
+    optional	uint64	ioa_task						=2;//	任务号	
+    optional	uint64	ioa_rule						=3;//	规则号	
+    required	string	ioa_name						=4;//	告警名称	
+    required	string	ioa_value						=5;//	规则内容	SDX规则语法描述
+    required	string	ioa_refer						=6;//	引用文档	参考文档
+    required	string	ioa_version						=7;//	规则版本	
+    optional	string	ioa_vul						    =8;//	关联漏洞	攻击者所用到的漏洞
+    required	string	ioa_direction					=9;//	攻击方向	cts/stc/to_client/from_server/from_client/to_server
+    required	string	ioa_attack_result				=10;//	攻击结果	企图/成功/失败/失陷
+    optional	string	ioa_code_language				=11;//	代码语言	
+    optional	string	ioa_affected_product			=12;//	影响平台	受影响APP/系统/应用
+    optional	string	ioa_malicious_family			=13;//	恶意代码家族	
+    optional	string	ioa_apt_campaign				=14;//	APT组织名称	
+    required	string	ioa_detail_info					=15;//	威胁详情描述
+}

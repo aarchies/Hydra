@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "MailAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+message MAIL_ALERT_INFO	{
+    optional string	email_sender			    =1;//	发件人	
+    optional string	email_receiver			    =2;//	收件人	
+    optional string	email_subject			    =3;//	邮件主题	
+    optional string	email_content			    =4;//	邮件正文	
+    optional string	email_attachment_md5	    =5;//	关联附件	
+    optional uint64	email_attachment_result	    =6;//	关联日志	
+    optional string	email_industry			    =7;//	所属行业	军事、外交、金融、通信、基建
+    repeated string	email_intents		        =8;//	邮件意图	打开附件、打开链接、扫二维码、密码解压、填写个人信息
+    repeated string	email_anomaly_tags	        =9;//	异常标签	异地登录、异常时间登录、定期登录、内部服务异常、UI不匹配、歧义重复
+    optional string	email_alert_reason		    =10;//	告警原因	
+}

@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.base";
+option java_outer_classname = "IpInfo";
+option go_package = "dissect/internal/plugin/session/pb/base;push_model";
+
+message IP_INFO{
+  required          string    ip = 1;                     // IP地址
+  required          uint32    port = 2;                   // 端口
+  required          string    ip_country = 3;             // 国家名
+  required          string    ip_stat = 4;                // 省份/洲名
+  required          string    ip_city = 5;                // 城市名
+  required          string    ip_org = 6;                 // 机构名
+  required          double    ip_longitude = 7;           // 纬度
+  required          double    ip_latitude = 8;            // 经度
+  required          string    ip_isp = 9;                 // 运营商
+  required          string    ip_asn = 10;                // AS信息
+  optional          string    ip_tag = 11;                // 标签
+}

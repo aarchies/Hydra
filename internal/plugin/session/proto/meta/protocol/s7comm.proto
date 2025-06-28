@@ -1,0 +1,39 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message S7CommInfo
+{
+  optional    uint32  proto = 1;
+  optional    uint32  rosctr = 2;
+  optional    uint32  pdu = 3;
+  optional    uint32  paraLen = 4;
+  optional    uint32  dataLen = 5;
+  optional    string   para = 6;
+  optional    uint32  itemCnt = 7;
+  optional    string   dataInfo = 8;
+  optional    uint32  paraClass = 9;
+  optional    uint32  paraCode = 10;
+  optional    uint32  paraGrp = 11;
+  optional    uint32  paraMode = 12;
+  optional    uint32  paraSub = 13;
+  optional    string   data = 14;
+  optional    uint32  paraType = 15;
+  optional    uint32  errorClass = 16;
+  optional    uint32  errorCode = 17;
+  optional    string   deviceVendor = 18;
+  optional    string   deviceType = 19;
+  optional    string   deviceName = 20;
+  optional    string   deviceModel = 21;
+  optional    string   deviceSn = 22;
+  optional    string   deviceOem = 23;
+  optional    string   cpuType = 24;
+  optional    uint32  cpuManufacturer = 25;
+  optional    uint32  cpuProfile = 26;
+  optional    uint32  cpuProfileType = 27;
+  optional    string   memorySn = 28;
+  optional    string   hardwareVersion = 29;
+  optional    string   firmwareVersion = 30;
+  optional    string   firmwareExtend = 31;
+
+}

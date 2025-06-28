@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "IocAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+message IOC_ALERT_INFO{
+  required  string  ioc_id = 1;//	IOC编号
+  required  string  ioc_value = 2;//	IOC内容
+  required  string  ioc_category = 3;//	IOC策略	IP_PORT、DOMAIN、URL、HASH、TPD…
+  required  uint64  ioc_public_date = 4;//	IOC发布时间
+  required  string  ioc_alert_name = 5;//	IOC告警名称
+  required  string  ioc_current_status = 6;//	IOC当前状态	"active/inactive/sinkhole/unknown具体含义为：1.active即活跃:当前观察到此IOC的活动2.inactive即非活跃：当前此IOC处于不活动状态，如休眠期等；3.sinkhole：表示此IOC（域名类）处于黑洞状态，或接管状态4.unknown：当前没有观察到此IOC的状态，此IOC依然是有效的威胁"
+  optional  bool    ioc_hot = 7;//	IOC热点状态	True/False
+  optional  string  ioc_first_seen = 8;//	首次发现时间	情报的首次发现时间
+  required  string  ioc_last_detection = 9;//	最近检测时间	最后一次检测到攻击的时间
+  optional  string  ioc_refer = 10;//	参考文档报告
+  optional  string  ioc_report_data = 11;//	报告发布时间
+  optional  string  ioc_report_vendor = 12;//	报告发布厂商
+  required  string  ioc_type = 13;//	IOC类型	"General：混合功能远控端；Connect：受控后上报配置信息，用于上线和命令控制分离的场景；Download：下载恶意软件组件；C2：命令控制通道；Dataleak：连接数据放置功能的服务器。"
+  required  bool    ioc_targeted = 14;//	定向攻击标识	True/False
+  optional  string  ioc_malicious_family = 15;//	恶意代码家族
+  optional  string  ioc_apt_campaign = 16;//	APT组织名称	对应actor、primary_name
+  optional  string  ioc_apt_alias = 17;//	APT组织别名
+  optional  string  ioc_apt_country = 18;//	APT所属国家
+  optional  string  ioc_apt_mission = 19;//	APT行动名称
+  optional  string  ioc_rat = 20;//	远控工具
+  optional  string  ioc_attack_method = 21;//	攻击手法	WEB攻击渗透、…
+  optional  string  ioc_vul = 22;//	关联漏洞	攻击者所用到的漏洞
+  optional  string  ioc_affected_sector = 23;//	影响行业
+  optional  string  ioc_affected_product = 24;//	影响平台
+  required  string  ioc_detail_info = 25;//	威胁详情描述	"威胁详情：漏洞详情：修复方案："
+}

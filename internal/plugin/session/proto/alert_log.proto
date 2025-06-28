@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+package Message;
+import "internal/plugin/session/proto/base/ip_info.proto";
+import "internal/plugin/session/proto/message/cert_alert_info.proto";
+import "internal/plugin/session/proto/message/crypto_alert_info.proto";
+import "internal/plugin/session/proto/message/file_alert_info.proto";
+import "internal/plugin/session/proto/message/iiot_alert_info.proto";
+import "internal/plugin/session/proto/message/ioa_alert_info.proto";
+import "internal/plugin/session/proto/message/iob_alert_info.proto";
+import "internal/plugin/session/proto/message/ioc_alert_info.proto";
+import "internal/plugin/session/proto/message/mail_alert_info.proto";
+import "internal/plugin/session/proto/message/mobile_alert_info.proto";
+import "internal/plugin/session/proto/message/proto_alert_info.proto";
+
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message ALERT_LOG{
+  required  string      guid = 1  ;//	日志全局ID	唯一 (设备IP+时间戳 SHA-256)
+  required  string      time = 2  ;//	告警时间	毫秒级,yyyy-mm-dd hh:mm:ss.ms
+  required  string      line_info = 3  ;//	线路号	51字节头
+  required  IP_INFO     sip = 4  ;// 源IP信息
+  required  IP_INFO     dip = 5  ;// 目的IP信息;
+  required  IP_INFO     aip = 6  ;// 受害者IP信息;
+  required  IP_INFO     vip = 7  ;// 攻击IP信息;
+  required  string      sensor_ip = 8  ;//	传感器IP
+  required  string      vendor_id = 9  ;//	供应商ID
+  required  string      LR_aggregate_value = 10  ;//	最近短时聚合值	根据不同的威胁类型采用不同的聚合策略
+  required  uint64      LR_first_alert_date = 11  ;//	最近短时首次告警时刻
+  required  uint64      LR_last_alert_date = 12  ;//	最近短时末次告警时刻
+  required  uint32      LR_alert_times = 13  ;//	最近短时告警次数
+  required  uint32      detect_type = 14  ;//	检测类型	取值范围为后文中*_alert_info的序列编号
+  required  uint32      threat_type = 15  ;//	威胁类型	见威胁类型列表
+  required  uint32      severity = 16  ;//	威胁等级	0（安全）、1（低危）、2（中危）、3（高危）、4（危急），危急是未公开披露APT或独家高价值情报
+  required  string      kill_chain = 17  ;//	杀伤链标签	侦察跟踪、武器构建、载荷投递、漏洞利用、安装植入、命令控制、目标达成
+  optional  string      tactic = 18  ;//	ATT&CK策略标签	TA0001（初始访问）
+  optional  string      technique = 19  ;//	ATT&CK技术标签	T1566（网络钓鱼）
+  required  string      confidence = 20  ;//	置信度	低、中、高
+  required  string      tran_proto = 21  ;//	传输层协议	TCP、UDP、SCTP
+  optional  string      app_proto = 22  ;//	应用层协议	HTTP、TLS、SSH
+  optional  bytes      meta_data = 23  ;//	原始元数据	产生告警的链接原始元数据，封装为一个字段，参考SDX网防目标元数据存储规范
+  optional  string      raw_data = 24  ;//	原始数据（存储路径）	产生告警的原始数据样本在网络文件系统中的存储路径
+  // 25-99 预留字段，后续可根据实际需要扩充基础告警信息字段
+
+  optional  IOC_ALERT_INFO    ioc_alert_info = 100;//	失陷情报告警信息	封装格式
+  optional  IOB_ALERT_INFO    iob_alert_info = 101;//	异常行为告警信息	封装格式
+  optional  IOA_ALERT_INFO    ioa_alert_info = 102;//	攻击利用告警信息	封装格式
+  optional  IIOT_ALERT_INFO    iiot_alert_info = 103;//	工业物联网告警信息	封装格式
+  optional  FILE_ALERT_INFO    file_alert_info = 104;//	文件检测告警信息	封装格式
+  optional  CRYPTO_ALERT_INFO  crypto_alert_info = 105;//	密数据异常告警信息	封装格式
+  optional  CERT_ALERT_INFO    cert_alert_info = 106;//	证书异常告警信息	封装格式
+  optional  MAIL_ALERT_INFO    mail_alert_info = 107;//	邮件威胁告警信息	封装格式
+  optional  MOBILE_ALERT_INFO  mobile_alert_info = 108;//	移动网威胁告警信息	封装格式
+  optional  PROTO_ALERT_INFO  proto_alert_info = 109;//	特色协议威胁告警信息	封装格式
+}

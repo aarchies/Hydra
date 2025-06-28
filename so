@@ -1,0 +1,17 @@
+FROM docker.fengchuang.tech/menace/tshark-ubuntu:base
+WORKDIR /data
+
+ADD ./config/ ./config/
+ADD ./export/ ./export/
+ADD ./internal/ ./internal/
+ADD ./pkg/ ./pkg/
+ADD ./utils/ ./utils/
+ADD ./main.go .
+COPY go.mod .
+COPY go.sum .
+
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go build -o libparser.so -buildmode=c-shared main.go
+RUN find /data -mindepth 1 ! -name 'libparser.so' -exec rm -rf {} +
+
+ENTRYPOINT ["tail", "-f", "/dev/null"]

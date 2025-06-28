@@ -1,0 +1,26 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message EtherNetIpInfo{
+  optional uint32 genState = 1; //	通用状态
+  optional uint32 class = 2;  // cip 协议的类别
+  optional bool ekeyCompbit = 3;  // 兼容性相关的控制位
+  optional uint32 port = 4;  // 客户端 IP 端口
+  optional uint32 logicalSegmentType = 5;  // CIP 逻辑段类型
+  optional string logicalSegmentFormat = 6;  // 逻辑段格式的含义作用
+  optional uint32 deviceType = 7;  // 设备类型
+  optional string ekeyDevType = 8;  // cip.ekey.devtype 表示设备类型
+  optional uint32 cipState = 9;  // CIP 协议的状态
+  optional uint32 bitHeader = 10;  // 32 位头部，包含协议信息
+  optional uint32 state = 11;  // 通用状态
+  optional uint32 priority = 12;  // 优先级
+  optional uint32 type = 13;  // 服务类型
+  optional uint32 targetSupplierId = 14;  // 目标供应商 ID
+  optional uint32 cmextstatus = 15;  // 扩展状态（CIP 通信协议字段）
+  optional uint32 cmfWofv = 16;  // 连接尺寸类型
+  optional uint32 cmfWotype = 17;  //连接类型（cip.cm.fwo.type）
+  optional uint32 cmfWoowner = 18;  //cip.cm.fwo.owner 字段表示所有者
+  optional uint32 ccosc = 19;  // cip 中服务
+  optional uint32 pcccFncCode = 20;  // 协议字段的功能代码
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "IiotAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+// 工业物联网告警信息	
+message IIOT_ALERT_INFO{
+    required	int32	iiot_alert_type	    =1;//告警类型	0：其他；1：ics；2：iot
+    required	int32	iiot_rule_id	    =2;//告警规则ID	
+    required	string	iiot_name	        =3;//告警名称	
+    optional	string	iiot_analysis	    =4;//协议解析概述	
+    required	int32	iiot_abnormal_type	=5;//异常规约类型	"1、字段标识错误2、取值超出范围 3、关联取值错误4、内部长度错误5、包总长度错误6、数据编码错误7、单元数据错误8、数据校验错误"
+    required	int32	iiot_action_type	=6;//关键操作类型	
+    optional	string	iiot_vul	        =7;//漏洞号	
+    required	string	iiot_refer	        =8;//引用文档	参考文档
+    optional	string	iiot_vendor	        =9;//设备/软件厂商	
+    optional	string	iiot_device_type	=10;//设备/软件类型	
+    optional	string	iiot_model	        =11;//设备型号/软件版本	
+    required	string	iiot_detail_info	=12;//威胁详情描述	"威胁详情：漏洞详情：修复方案:"
+}	

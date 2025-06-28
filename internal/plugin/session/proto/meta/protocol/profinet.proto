@@ -1,0 +1,31 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message ProFiNetInfo{
+  optional bool status = 1; // 状态
+  optional uint32 opnum = 2; // 操作编号
+  optional string cmMacAddr = 3; // CM 发起者的 MAC 地址
+  optional uint32 cmUdport = 4; // CM 发起方 UDP 端口
+  optional uint32 companionAR = 5; // 确认同伴 AR 的标识
+  optional string cmStationName = 6; // CM 发起方站点名称
+  optional uint32 iocrtype = 7; // 输入输出控制记录类型
+  optional bool subframeMonitor = 8; // 分布式子帧监控器
+  optional string quicklyMacAddr = 9; // 快速转发 MAC 地址
+  optional uint32 framesendoffset = 10; // 发送帧的偏移量
+  optional string cmrespondermacadd = 11; // CM 响应者的 MAC 地址
+  optional uint32 numberofiocs = 12;// 输入/输出控制数量
+  optional uint32 maxAlarmDatalen = 13; // 最大报警数据长度
+  optional string seqnumber = 14; // 序列号
+  optional string sessionkey = 15; // 会话密钥
+  optional uint32 localalarmref = 16; // 本地告警引用
+  optional uint32 slotnr = 17; // 插槽编号
+  optional uint32 blocklength = 18; // 数据块长度
+  optional uint32 cmresponderudpport = 19; // CM 响应方 UDP 端口
+  optional uint32 blockversionhigh = 20; // 数据块版本高字节
+  optional string datadescriptiontree = 21; // 数据描述
+  optional uint32 lengthiocs = 22; // IOCS 的长度
+  optional string deviceAttributes = 23; // 设备访问相关属性
+  optional bool ioxs = 24; // 输入/输出控制状态
+  optional uint32 frameType = 25; // 帧类型协议
+}

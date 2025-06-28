@@ -1,0 +1,35 @@
+syntax = "proto2";
+package meta;
+
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message EnipInfo
+{
+  optional    uint32  cmd = 1;
+  optional    uint32  length = 2;
+  optional    uint32  session = 3;
+  optional    uint32  status = 4;
+  optional    string  context = 5;
+  optional    string  socketInnerIp = 6;
+  optional    uint32  socketInnerPort = 7;
+  optional    uint32  vendor = 8;
+  optional    uint32  type = 9;
+  optional    string  name = 10;
+  optional    uint32  sn = 11;
+  optional    string   firmwareVersion = 12;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

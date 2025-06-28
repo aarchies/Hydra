@@ -1,0 +1,39 @@
+syntax = "proto2";
+package meta;
+option go_package = "dissect/internal/plugin/session/pb;push_model";
+
+message OmronFinsInfo {
+  optional uint32 sa2 = 1;  //	源单元地址
+  optional string sna = 2; //源网络地址
+  optional uint32 command = 3; //	欧姆龙命令代码
+  optional uint32 da1 = 4; //目标节点编号
+  optional uint32 sa1 = 5;  //源节点编号
+  optional uint32 da2 = 6; //目标单元地址
+  optional uint32 parAreacode = 7;  //	欧姆龙参数区域代码
+  optional uint32 programNum = 8;  //	欧姆龙程序编号
+  optional uint32 gct = 9;  //	网关计数（或网关数量）
+  optional uint32 programAreaSize = 10; //程序区大小
+  optional string dna = 11; //	目的网络地址
+  optional uint32 modecode = 12;  //欧姆龙模式代码
+  optional bool status = 13; //	欧姆龙状态
+  optional string typeOfMemCard = 14;  //	内存卡的种类
+  optional string commanddata = 15;  //	欧姆龙命令数据
+  optional uint32 counterSize = 16;  //定时器/计数器大小
+  optional uint32 responsecode = 17;  //欧姆龙响应代码
+  optional bool failcycletimeover = 18;  //	欧姆龙致命周期时间超时
+  optional bool memError = 19;  //	间接数据内存错误指示
+  optional bool failCpuBusError = 20; //	欧姆龙致命 CPU 总线错误
+  optional uint32 diskno = 21; //欧姆龙磁盘编号
+  optional string parameter = 22;  //	欧姆龙协议的参数
+  optional uint32 volumeparcode = 23;  //	欧姆龙体积参数代码
+  optional uint32 transferparcode = 24;//	欧姆龙传输参数代码
+  optional uint32 fileparcode = 25; //	欧姆龙文件参数代码
+  optional string type = 26; //欧姆龙协议类型
+  optional string datatypetype = 27;  //	欧姆龙数据类型类型
+  optional string ctrModel = 28; //	欧姆龙控制器型号
+  optional string ctrVersion = 29; //欧姆龙控制器版本
+  optional uint32 tcpmagic = 30; //	欧姆龙 TCP 魔术字节，标识作用
+  optional uint32 tcplength = 31; //	欧姆龙 TCP 协议数据长度
+  optional uint32 tcpcommand = 32;//	欧姆龙 TCP 命令
+  optional uint32 tcperrorcode = 33;  //	欧姆龙 TCP 错误代码
+}

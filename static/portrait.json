@@ -1,0 +1,58 @@
+{
+    "MQTT": {
+        "enable": true,
+        "fields": [
+            "mqtt.username",
+            "mqtt.passwd",
+            "mqtt.clientid",
+            "mqtt.ver",
+            "mqtt.topic",
+            "mqtt.willtopic"
+        ],
+        "func_code": {
+            "read": [],
+            "write": []
+        }
+    },
+    "Modbus": {
+        "enable": true,
+        "fields": [],
+        "func_code": {
+            "read": [
+                "modbus.func_code"
+            ],
+            "write": [
+                "modbus.func_code"
+            ]
+        }
+    },
+    "RTSP": {
+        "enable": true,
+        "fields": [
+            "rtsp.url"
+        ],
+        "func_code": {}
+    },
+    "S7comm": {
+        "enable": true,
+        "fields": [],
+        "func_code": {
+            "read": [
+                "s7comm.param.func"
+            ],
+            "write": [
+                "s7comm.param.func"
+            ]
+        }
+    },
+    "XMPP": {
+        "enable": true,
+        "fields": [
+            "xmpp.auth"
+        ],
+        "func_code": {
+            "read": [],
+            "write": []
+        }
+    }
+}

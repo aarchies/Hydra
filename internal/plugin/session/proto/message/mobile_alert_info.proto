@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package Message;
+option java_package = "com.judgment.common.proto.message";
+option java_outer_classname = "MobileAlertInfo";
+option go_package = "dissect/internal/plugin/session/pb/message;push_model";
+
+// 移动网威胁告警信息
+message MOBILE_ALERT_INFO{
+
+}

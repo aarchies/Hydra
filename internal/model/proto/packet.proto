@@ -1,0 +1,99 @@
+syntax = "proto3";
+package packet;
+option go_package = "dissect/internal/model/pb";
+import "google/protobuf/timestamp.proto";
+
+message ProducerData{
+    bytes  dataByte=1;
+    string lineNo =2;
+    string taskId =3;
+    uint32 direction =4;
+    bool   isAlert =5;
+    int64  sId =6;
+    string classType =7;
+    string eventMSG =8;
+}
+
+message ProtocolData {
+    string n = 1;
+    string sn = 2;  
+    string sz = 3;
+    string ps = 4;
+    repeated ProtocolField f=5;
+    int32 fl=6; 
+}
+
+message ProtocolField {
+    string n = 1;
+    string sn = 2;  
+    string sz = 3;
+    string ps = 4;
+    string sh = 5;
+    string v = 6;
+}
+
+message EdtData {
+    string p =1;
+    string s =2;
+    string d =3;
+    string desc =4;
+}
+
+message PacketResult{
+    EdtData pi =1;
+    repeated ProtocolData p =2;
+    int32 pl =3;
+    bool s =4;
+}
+
+ 
+message ConsumerData {
+    int64  negTimestamp =1;
+    string sessionId =2;
+    string taskId =3;
+    string lineNo =4;
+    string eventId =5;
+    string victimId =6;
+    bytes  dataByte =7;
+    google.protobuf.Timestamp  createTime =8;
+    uint32  direction =9;
+    string srcMac=10;
+    string srcIP=11;
+    uint32 srcPort=12;
+    string dstMac=13;
+    string dstIP=14;
+    uint32 dstPort=15;
+    string protocol=16;
+    uint32 protocolType=17;
+    string transportLayer=18;
+    string eThType=19;
+    string iPVersion=20;
+    string action=21;
+    int64  sId=22;
+    string eventType=23;
+    string eventDesc=24;
+    bool isAttack=25;
+    uint32 errType=26;
+    bool isKey=27;
+    bool isVul=28;
+    uint32 eventLevel=29;
+    string vul=30;
+    string srcCountry=31;
+    string dstCountry=32;
+    string srcProvince=33;
+    string dstProvince=34;
+    string srcCity=35;
+    string dstCity=36;
+    float latitudeSrc=37;
+    float longitudeSrc=38;
+    float latitudeDst=39;
+    float longitudeDst=40;
+    string vendor=41;
+    string deviceType=42;
+    string model=43;
+    string metaRaw=44;
+    int32 actionClassCode=45;
+    repeated ProtocolData meta=46;
+}
+
+ 

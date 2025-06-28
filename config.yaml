@@ -1,0 +1,43 @@
+db:
+  mysql:
+    hosts:
+      - "192.168.99.215"
+    port: 4000
+    username: "root"
+    password: ""
+    dataBase: "platform"
+    max-idle-conn: 10
+    max-open-conn: 100
+    config: "charset=utf8mb4&parseTime=True&loc=Local"
+    log-mode: "error"
+  clickhouse:
+    hosts:
+      - "192.168.99.215:9000"
+    username: "platform"
+    password: "s0ynO7s7xwhT2LD"
+    dataBase: "platform"
+    max-idle-conn: 10
+    max-open-conn: 100
+    is_debug: false # 是否开启debug模式
+
+system:
+  path: "static"
+  location_file: "IP2LOCATION-LITE-DB11.BIN"
+  protocol_file: "protocol.json"
+  protocol_key_file: "protocol_key.json"
+  portrait_map_file: "portrait.json"
+  area_file: "area.json"
+  log_level: 'info'
+ 
+session:
+  expired: 20 # 会话过期时间（秒）
+  pcap_path: "/pcap" # 会话pcap保存路径 /NFSPath/pcapPath
+  root_path: "/root"  # nfs路径 (根路径)
+  push:
+    ip: 192.168.99.139
+    line_info: line1
+    sensor_ip: 192.168.99.139
+    vendor_id: 123456
+    lr_aggregate_value: 30  # 时间单位s
+    conn_timeout: 1
+    aggregate_model: 1   #0-长串聚合,1-短串聚合
