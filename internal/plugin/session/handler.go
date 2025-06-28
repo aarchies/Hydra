@@ -4,28 +4,19 @@ import (
 	"context"
 	"dissect/internal"
 	"dissect/internal/model"
-	push_model "dissect/internal/plugin/session/pb"
-	base "dissect/internal/plugin/session/pb/base"
-	message "dissect/internal/plugin/session/pb/message"
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/duke-git/lancet/v2/condition"
-	"github.com/duke-git/lancet/v2/cryptor"
-	"github.com/duke-git/lancet/v2/pointer"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcapgo"
 	"github.com/google/uuid"
 	"github.com/segmentio/kafka-go"
-	"google.golang.org/protobuf/proto"
 
 	"github.com/sirupsen/logrus"
 )
@@ -259,249 +250,10 @@ func (s *Session) evict() {
 		logrus.Errorln("session-> evict db store failed: ", err)
 	}
 
-	// send to sessionchan
-	for _, item := range s.List {
-		if item.ProtocolType != 2 && item.ProtocolType != 3 {
-			continue
-		}
-		alertLog := makeAlertLog(item, serviceContext, conf)
-		alertLog.RawData = pointer.Of(path.Join("/mnt", s.Path))
-		sendMessage(alertLog)
-	}
-
 	logrus.Debugln("session-> evict is complated. ", s.Path)
 
 	// clear session
 	handlers.Delete(s.tuple)
 	s.List = nil
 	s = nil
-}
-
-func makeAlertLog(data *model.ConsumerData, svc *internal.ServiceContext, conf *Config) *push_model.ALERT_LOG {
-
-	var alertLog push_model.ALERT_LOG
-	alertLog.Guid = pointer.Of(cryptor.Sha256(svc.Config.Session.Push.IP + strconv.FormatInt(time.Now().UnixMilli(), 10)))
-	alertLog.Time = pointer.Of(data.CreateTime.Format("2006-01-02 15:04:05.000"))
-	alertLog.LineInfo = pointer.Of(svc.Config.Session.Push.LineInfo)
-	alertLog.LineInfo = pointer.Of(data.LineNo)
-
-	//默认值
-	baseIpInfo := base.IP_INFO{
-		Ip:          pointer.Of(""),
-		Port:        pointer.Of(uint32(0)),
-		IpCountry:   pointer.Of(""),
-		IpStat:      pointer.Of(""),
-		IpCity:      pointer.Of(""),
-		IpOrg:       pointer.Of(""),
-		IpLongitude: pointer.Of(0.0),
-		IpLatitude:  pointer.Of(0.0),
-		IpIsp:       pointer.Of(""),
-		IpAsn:       pointer.Of(""),
-	}
-	alertLog.Sip = &base.IP_INFO{
-		Ip:          pointer.Of(data.SrcIP),
-		Port:        pointer.Of(uint32(data.SrcPort)),
-		IpCountry:   pointer.Of(data.SrcCountry),
-		IpStat:      pointer.Of(data.SrcProvince),
-		IpCity:      pointer.Of(data.SrcCity),
-		IpOrg:       pointer.Of(""),
-		IpLongitude: pointer.Of(float64(data.LongitudeSrc)),
-		IpLatitude:  pointer.Of(float64(data.LatitudeSrc)),
-		IpIsp:       pointer.Of(""),
-		IpAsn:       pointer.Of(""),
-	}
-	alertLog.Dip = &base.IP_INFO{
-		Ip:          pointer.Of(data.DstIP),
-		Port:        pointer.Of(uint32(data.DstPort)),
-		IpCountry:   pointer.Of(data.DstCountry),
-		IpStat:      pointer.Of(data.DstProvince),
-		IpCity:      pointer.Of(data.DstCity),
-		IpOrg:       pointer.Of(""),
-		IpLongitude: pointer.Of(float64(data.LongitudeDst)),
-		IpLatitude:  pointer.Of(float64(data.LatitudeDst)),
-		IpIsp:       pointer.Of(""),
-		IpAsn:       pointer.Of(""),
-	}
-	alertLog.Aip = &baseIpInfo
-	alertLog.Vip = &baseIpInfo
-	alertLog.IiotAlertInfo = new(message.IIOT_ALERT_INFO)
-	alertLog.Severity = pointer.Of(uint32(0))
-	alertLog.KillChain = pointer.Of("")
-	alertLog.Tactic = pointer.Of("")
-	alertLog.Technique = pointer.Of("")
-	alertLog.Confidence = pointer.Of("")
-	alertLog.IiotAlertInfo.IiotRuleId = pointer.Of(int32(0))
-	alertLog.IiotAlertInfo.IiotName = pointer.Of("")
-	alertLog.IiotAlertInfo.IiotVul = pointer.Of("")
-	alertLog.IiotAlertInfo.IiotRefer = pointer.Of("")
-	alertLog.IiotAlertInfo.IiotDetailInfo = pointer.Of("")
-	alertLog.IiotAlertInfo.IiotAbnormalType = pointer.Of(int32(0))
-	alertLog.SensorIp = pointer.Of(svc.Config.Session.Push.SensorIp)
-	alertLog.VendorId = pointer.Of(svc.Config.Session.Push.VendorId)
-	alertLog.LRAggregateValue = pointer.Of("")
-	alertLog.LRFirstAlertDate = pointer.Of(uint64(time.Now().UnixMilli()))
-	alertLog.LRLastAlertDate = pointer.Of(uint64(time.Now().UnixMilli()))
-	alertLog.LRAlertTimes = pointer.Of(uint32(1))
-
-	if rule, ok := svc.Cache.SuricataRuleMap[data.SID]; ok {
-		var srcIpInfo = base.IP_INFO{
-			Ip:          pointer.Of(data.SrcIP),
-			Port:        pointer.Of(uint32(data.SrcPort)),
-			IpStat:      pointer.Of(data.SrcProvince),
-			IpCity:      pointer.Of(data.SrcCity),
-			IpCountry:   pointer.Of(data.SrcCountry),
-			IpLongitude: pointer.Of(float64(data.LongitudeSrc)),
-			IpLatitude:  pointer.Of(float64(data.LatitudeSrc)),
-			IpOrg:       pointer.Of(""),
-			IpIsp:       pointer.Of(""),
-			IpAsn:       pointer.Of(""),
-		}
-		var dstIpInfo = base.IP_INFO{
-			Ip:          pointer.Of(data.DstIP),
-			Port:        pointer.Of(uint32(data.DstPort)),
-			IpStat:      pointer.Of(data.DstProvince),
-			IpCity:      pointer.Of(data.DstCity),
-			IpCountry:   pointer.Of(data.DstCountry),
-			IpLongitude: pointer.Of(float64(data.LongitudeDst)),
-			IpLatitude:  pointer.Of(float64(data.LatitudeDst)),
-			IpOrg:       pointer.Of(""),
-			IpIsp:       pointer.Of(""),
-			IpAsn:       pointer.Of(""),
-		}
-		//确定受害者和攻击者
-		if rule.IsAttack {
-			alertLog.Aip = &srcIpInfo
-			alertLog.Vip = &dstIpInfo
-		} else {
-			alertLog.Aip = &dstIpInfo
-			alertLog.Vip = &srcIpInfo
-		}
-
-		alertLog.Severity = pointer.Of(uint32(rule.Level))
-		alertLog.KillChain = pointer.Of(rule.KillChain)
-		alertLog.Tactic = pointer.Of(rule.AttackTactic)
-		alertLog.Technique = pointer.Of(rule.AttackTechnique)
-		alertLog.Confidence = convertConfidence(rule.Confidence)
-		alertLog.IiotAlertInfo.IiotRuleId = pointer.Of(int32(data.SID))
-		alertLog.IiotAlertInfo.IiotName = pointer.Of(rule.RName)
-		if vul, ok := conf.VulnerabilityMap[rule.CorrVuln]; ok {
-			alertLog.IiotAlertInfo.IiotVul = pointer.Of(vul.CveCode)
-			alertLog.IiotAlertInfo.IiotRefer = pointer.Of(vul.Url)
-			alertLog.IiotAlertInfo.IiotDetailInfo = pointer.Of(rule.ThreatDetail + ";" + vul.Detail + ";" + vul.Solution)
-		} else {
-			alertLog.IiotAlertInfo.IiotRefer = pointer.Of("")
-			alertLog.IiotAlertInfo.IiotDetailInfo = pointer.Of("")
-		}
-		alertLog.IiotAlertInfo.IiotAbnormalType = pointer.Of(int32(data.ErrType))
-	}
-
-	alertLog.DetectType = pointer.Of(uint32(103)) //工业控制检测
-	alertLog.ThreatType = ThreatType[data.EventType]
-	if alertLog.ThreatType == nil {
-		alertLog.ThreatType = proto.Uint32(0)
-	}
-	alertLog.TranProto = pointer.Of(data.TransportLayer)
-	alertLog.AppProto = pointer.Of(data.Protocol)
-	alertLog.IiotAlertInfo.IiotVendor = pointer.Of(data.Vendor)
-	alertLog.IiotAlertInfo.IiotDeviceType = pointer.Of(data.DeviceType)
-	alertLog.IiotAlertInfo.IiotModel = pointer.Of(data.Model)
-
-	metaData := fillMetaData(data, conf)
-	if metaData != nil {
-		marshal, err := proto.Marshal(metaData)
-		if err == nil {
-			alertLog.MetaData = marshal
-		}
-	}
-
-	alertLog.IiotAlertInfo.IiotAlertType = convertAlertType(data.ProtocolType)
-	alertLog.IiotAlertInfo.IiotAnalysis = pointer.Of(data.Action)
-	alertLog.IiotAlertInfo.IiotActionType = convertActionType(data.ActionClassCode)
-	return &alertLog
-}
-
-func updateStatisticMap(successOrFail bool) {
-	lock.Lock()
-	key := condition.TernaryOperator(successOrFail, "push_success", "push_fail")
-	_, ok := maps[key]
-	if !ok {
-		maps[key] = 1
-	} else {
-		maps[key] += 1
-	}
-	lock.Unlock()
-}
-
-func convertAlertType(protocolType uint8) *int32 {
-	var r int32
-	if protocolType == 1 {
-		r = 2
-	} else if protocolType == 2 {
-		r = 3
-	} else {
-		r = 1
-	}
-	return &r
-}
-
-func convertConfidence(ruleConfidence int) *string {
-	var result string
-	if ruleConfidence >= 80 {
-		result = "高"
-	} else if ruleConfidence >= 60 {
-		result = "中"
-	} else {
-		result = "低"
-	}
-	return &result
-}
-
-func convertActionType(actionClassCode int32) *int32 {
-	var result int32
-	if actionClassCode != 0 {
-		result = actionClassCode
-	} else {
-		result = 99
-	}
-	return &result
-}
-
-func sendMessage(alertLog *push_model.ALERT_LOG) {
-	data, err := proto.Marshal(alertLog)
-	if err != nil {
-		logrus.Errorln("protobuf marshal error:", err.Error())
-		updateStatisticMap(false)
-		return
-	}
-
-	if err = kafkaProducer.WriteMessages(context.Background(), kafka.Message{Value: data}); err != nil {
-		logrus.Errorln("kafka send message error:", err.Error())
-		updateStatisticMap(false)
-	} else {
-		updateStatisticMap(true)
-	}
-}
-
-func timingSave(svc *internal.ServiceContext) {
-	lock.Lock()
-	s := maps["push_success"]
-	f := maps["push_fail"]
-	maps["push_success"] = 0
-	maps["push_fail"] = 0
-	lock.Unlock()
-	if s == 0 && f == 0 {
-		return
-	}
-
-	if err := svc.DB.Create(&DataPushStatistics{
-		ID:       nil,
-		SendTime: time.Now(),
-		Success:  s,
-		Fail:     f,
-		DataType: "聚合告警日志",
-	}).Error; err != nil {
-		logrus.Errorln("[聚合告警日志]外部推送统计结果入库失败!", err.Error())
-		return
-	}
-	svc.DB.Model(&DataPushConfig{}).Where("data_type = ? and status = ?", "聚合告警日志", "1").Update("send_last_time", time.Now())
 }
