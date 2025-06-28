@@ -142,7 +142,6 @@ func callBack(addr []byte) {
 
 			atomic.CompareAndSwapUint64(&header.WriteIdx, w, w+1)
 			futex.PostWithRetry(3)
-			//fmt.Println("worker Send:", data.id)
 		}
 	}
 }
